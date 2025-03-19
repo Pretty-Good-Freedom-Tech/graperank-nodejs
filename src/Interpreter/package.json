@@ -1,0 +1,19 @@
+{
+  "name": "graperank-interpreter",
+  "version": "0.1.x",
+  "description": "GrapeRank Interpreter module, used to generate ratings from interpreter protocols.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 1"
+  },
+  "keywords": [
+    "GrapeRank",
+    "Interpreter"
+  ],
+  "author": "Pretty Good Freedom Tech",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "nostr-tools": "^2.7.2",
+    "ws": "^8.18.0"
+  }
+}

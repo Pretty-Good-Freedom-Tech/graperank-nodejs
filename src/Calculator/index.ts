@@ -1,169 +1,176 @@
-import { type GrapeRankGenerator } from ".."
-import type { CalculatorParams, CalculatorSums, elemId, protocol, Rating, RatingsList, Scorecard, ScorecardData, ScorecardInterpretation, scoreindex, userId, Scorecards, CalculatorIterationStatus, GrapevineKeys, ScorecardsEntry } from "../types"
+import type { CalculatorParams, CalculatorSums, elemId, protocol, Rating, RatingsList, Scorecard, ScorecardData, ScorecardInterpretation, CalculatorIterationStatus, ScorecardsEntry, userId } from "../types"
 import { DEBUGTARGET } from "../utils"
 
 // var params : Required<CalculatorParams>
 
-var DefaultParams : Required<CalculatorParams> = {
-  // incrementally decrease influence weight
-  attenuation : .5,
-  // factor for calculating confidence 
-  // MUST be bellow 1 or confidence will ALWAYS be 0
-  // CAUTION : too high (eg:.7) and users beyond a certain DOS (eg:2) will always have a score of zero
-  rigor : .5,
-  // minimum score ABOVE WHICH scorecard will be included in output
-  minscore : 0,
-  // max difference between calculator iterations
-  // ZERO == most precise
-  precision : 0,
-  // devmode if off by default
-  devmode : false
-}
+export class Calculator {
 
-/**
- * Calculate new scorecards from interpreted ratings and input scorecards
- */
-export async function calculate ( this : GrapeRankGenerator, ratings : RatingsList) : Promise<ScorecardsEntry[]> {
-  var scorecards : ScorecardsEntry[]
-  let params : Required<CalculatorParams> = {...DefaultParams, ...this.settings.calculator} 
-  this.settings = {calculator : {...params}}
-
-  console.log("GrapeRank : Calculator : instantiated with ",ratings.length," ratings and params : ", params)
-
-  // setup
-  // STEP A : initialize ratee scorecard
-  // Retrieve or create a ScorecardCalculator for each ratee in ratings
-  for(let r in ratings){
-    let ratee = ratings[r].ratee
-    let rater = ratings[r].rater
-    if(ratee && !this.calculators.get(ratee)){
-      // TODO get scores for each rater from worldview input cards
-      // let ratercard = getInputScorecard(rater as string)
-      let calculator = new ScorecardCalculator( this.keys, ratee , params)
-      if(calculator) this.calculators.set(ratee, calculator)
-    }
+  constructor(
+    readonly observer : userId,
+    readonly ratings : RatingsList,
+    params? : Partial<CalculatorParams>,
+    private updateStatus? : (newstatus : CalculatorIterationStatus) => Promise<void>,
+    private updateComplete? : () => Promise<void>
+  ){
+    if(params) this.params = {...this.params, ...params}
   }
-  console.log("GrapeRank : Calculator : setup with ",this.calculators.size," calculators.")
-  // if(!calculators.has(keys.observer as string))
-  //   throw('GrapeRank : Calculator : missing oberver calculator')
 
-  // iterate
-  // calctimestamp = Date.now()
-  await iterate(this, ratings)
+  readonly params : Required<CalculatorParams> = {
+    // incrementally decrease influence weight
+    attenuation : .5,
+    // factor for calculating confidence 
+    // MUST be bellow 1 or confidence will ALWAYS be 0
+    // CAUTION : too high (eg:.7) and users beyond a certain DOS (eg:2) will always have a score of zero
+    rigor : .5,
+    // minimum score ABOVE WHICH scorecard will be included in output
+    minscore : 0,
+    // max difference between calculator iterations
+    // ZERO == most precise
+    precision : 0,
+    // devmode if off by default
+    devmode : false
+  }
 
-  await this.updateCalculatorComplete() 
-  
-  // console.log("GrapeRank : Calculator : output GeneratorOutput : ",this.keys, this.grapevine)
+  private calculators : Map<elemId,ScorecardCalculator> = new Map()
 
-  scorecards = outputScorecardsData(this)
+  private _stopped : boolean = false
 
-  return scorecards
-}
+  stop(){
+    this._stopped = true
+  }
 
+  /**
+   * Calculate new scorecards from interpreted ratings and input scorecards
+   */
+  async calculate () : Promise<ScorecardsEntry[]> {
 
-// returns number of scorecards calculated
-async function iterate(generator : GrapeRankGenerator, ratings : RatingsList ) : Promise<number> {
-  let calculating : number = 0
-  let calculated : number = 0
-  let uncalculated : string[]
-  let notcalculatedwarning : number = 0
-  let prevcalculating = 0
-  let prevcalculated = 0
-  let iteration = 0
-  let iterationscores : number[] = []
-  let iterationstatus : CalculatorIterationStatus
+    console.log("GrapeRank : Calculator : instantiated with ",this.ratings.length," ratings and params : ", this.params)
 
-  while(calculated < generator.calculators.size){
-    if(generator.stopped) return undefined
-    iteration ++
-    prevcalculating = calculating
-    prevcalculated = calculated
-    calculating = 0
-    calculated = 0
-    uncalculated = []
-    iterationstatus = {}
-    console.log("------------ BEGIN ITERATION : ", iteration, " --------------------")
-    
-    // STEP B : calculate sums
-    // Add rater's rating to the sum of weights & products for the ratee scorecard
-    for(let r in ratings){
-      let calculator = generator.calculators.get(ratings[r].ratee)
-      let ratercard = generator.calculators.get(ratings[r].rater as string)?.scorecard
-      if(calculator) {
-        calculator.sum( ratings[r], ratercard)
+    // setup
+    // STEP A : initialize ratee scorecard
+    // Retrieve or create a ScorecardCalculator for each ratee in ratings
+    for(let r in this.ratings){
+      let ratee = this.ratings[r].ratee
+      let rater = this.ratings[r].rater
+      if(ratee && !this.calculators.get(ratee)){
+        // TODO get scores for each rater from worldview input cards
+        // let ratercard = getInputScorecard(rater as string)
+        let calculator = new ScorecardCalculator( this.observer, ratee , this.params)
+        if(calculator) this.calculators.set(ratee, calculator)
       }
     }
+    console.log("GrapeRank : Calculator : setup with ",this.calculators.size," calculators.")
 
-    // STEP C : calculate influence
-    // calculate final influence and confidence for each ratee scorecard
-    // call calculate again if calculation is NOT complete
-    generator.calculators.forEach( (calculator, rater) => {
-      var dos = calculator.dos || 0
-      iterationstatus[dos] = iterationstatus[dos] || {
-        calculated : 0,
-        uncalculated : 0,
-        average : 0
-      }
-      if( !calculator.calculated ){
-        calculator.calculate()
-        calculating ++
-      }
-      if(calculator.calculated){
-        calculated ++
-        // add to dos status for calculated
-        iterationstatus[dos].calculated ++
-        // DOS average is SUM of all calculated scores UNTIL converted to an average 
-        iterationstatus[dos].average += calculator.score
-      }else{
-        uncalculated.push(rater)
-        // add to dos status for uncalculated
-        iterationstatus[dos].uncalculated ++
-      }
-    }) 
-    // calculate averages scores for each DOS status
-    for(var dos in iterationstatus){
-      iterationstatus[dos].average = iterationstatus[dos].average / iterationstatus[dos].calculated 
-    }
-    await generator.updateCalculatorStatus({...iterationstatus})
+    await this.iterate()
 
-    // LOG iteration
-    iterationscores = logScoresForIteration(generator)
+    if(this.updateComplete) await this.updateComplete() 
 
-    console.log("TOTAL number scorecards : ", generator.calculators.size )  
-    console.log("TOTAL scorecards calculating this iteration : ", calculating)
-    console.log("TOTAL scorecards calculated : ", calculated)
-    // halt iterator if needed
-    if( uncalculated.length ){
-      if(calculated == prevcalculated && calculating == prevcalculating ){
-        notcalculatedwarning ++
-        console.log("WARNING ",notcalculatedwarning," : scores did not change for ", calculating," scorecards in calculate()")
-        if(notcalculatedwarning > 4) {
-          console.log("HALTING iterator : due to unchanging scores for the following raters : ", uncalculated)
-          calculated = generator.calculators.size
+    return this.scorecards
+  }
+
+  // returns number of scorecards calculated
+  private async iterate() : Promise<number> {
+    let calculating : number = 0
+    let calculated : number = 0
+    let uncalculated : string[]
+    let notcalculatedwarning : number = 0
+    let prevcalculating = 0
+    let prevcalculated = 0
+    let iteration = 0
+    let iterationscores : number[] = []
+    let iterationstatus : CalculatorIterationStatus
+
+    while(calculated < this.calculators.size){
+      if(this._stopped) return undefined
+      iteration ++
+      prevcalculating = calculating
+      prevcalculated = calculated
+      calculating = 0
+      calculated = 0
+      uncalculated = []
+      iterationstatus = {}
+      console.log("------------ BEGIN ITERATION : ", iteration, " --------------------")
+      
+      // STEP B : calculate sums
+      // Add rater's rating to the sum of weights & products for the ratee scorecard
+      for(let r in this.ratings){
+        let calculator = this.calculators.get(this.ratings[r].ratee)
+        let raterscore = this.calculators.get(this.ratings[r].rater as string)?.score
+        if(calculator) {
+          calculator.sum( this.ratings[r], raterscore)
         }
       }
-      if(iteration > 100){
-        console.log("HALTING iterator : exeded MAX 100 iterations in calculate() ")
-        calculated = generator.calculators.size
+
+      // STEP C : calculate influence
+      // calculate final influence and confidence for each ratee scorecard
+      // call calculate again if calculation is NOT complete
+      this.calculators.forEach( (calculator, rater) => {
+        var dos = calculator.dos || 0
+        iterationstatus[dos] = iterationstatus[dos] || {
+          calculated : 0,
+          uncalculated : 0,
+          average : 0
+        }
+        if( !calculator.calculated ){
+          calculator.calculate()
+          calculating ++
+        }
+        if(calculator.calculated){
+          calculated ++
+          // add to dos status for calculated
+          iterationstatus[dos].calculated ++
+          // DOS average is SUM of all calculated scores UNTIL converted to an average 
+          iterationstatus[dos].average += calculator.score
+        }else{
+          uncalculated.push(rater)
+          // add to dos status for uncalculated
+          iterationstatus[dos].uncalculated ++
+        }
+      }) 
+      // calculate averages scores for each DOS status
+      for(var dos in iterationstatus){
+        iterationstatus[dos].average = iterationstatus[dos].average / iterationstatus[dos].calculated 
       }
+      if(this.updateStatus) await this.updateStatus({...iterationstatus})
+
+      // LOG iteration
+      iterationscores = logScoresForIteration(this.calculators)
+
+      console.log("TOTAL number scorecards : ", this.calculators.size )  
+      console.log("TOTAL scorecards calculating this iteration : ", calculating)
+      console.log("TOTAL scorecards calculated : ", calculated)
+      // halt iterator if needed
+      if( uncalculated.length ){
+        if(calculated == prevcalculated && calculating == prevcalculating ){
+          notcalculatedwarning ++
+          console.log("WARNING ",notcalculatedwarning," : scores did not change for ", calculating," scorecards in calculate()")
+          if(notcalculatedwarning > 4) {
+            console.log("HALTING iterator : due to unchanging scores for the following raters : ", uncalculated)
+            calculated = this.calculators.size
+          }
+        }
+        if(iteration > 100){
+          console.log("HALTING iterator : exeded MAX 100 iterations in calculate() ")
+          calculated = this.calculators.size
+        }
+      }
+      console.log("------------ END ITERATION : ", iteration, " --------------------")
     }
-    console.log("------------ END ITERATION : ", iteration, " --------------------")
+    return calculated
+
   }
-  return calculated
 
-}
+  get scorecards() : ScorecardsEntry[] {
+    let scorecards : [elemId, Required<ScorecardData>][] = []
+    this.calculators.forEach((calculator) => {
+      if(calculator.output) scorecards.push(calculator.output)
+    })
+    // sort first : scorecards with higher scores and most ratings
+    return scorecards.sort((a ,b )=>{
+      return  a[1].score - b[1].score ||  a[1].interpretersums['nostr-follows']?.numRatings - b[1].interpretersums['nostr-follows']?.numRatings 
+    })
+  }
 
-
-function outputScorecardsData(generator : GrapeRankGenerator) : ScorecardsEntry[] {
-  let scorecards : [elemId, Required<ScorecardData>][] = []
-  generator.calculators.forEach((calculator) => {
-    scorecards.push(calculator.output)
-  })
-  // sort first : scorecards with higher scores and most ratings
-  return scorecards.sort((a ,b )=>{
-    return  a[1].score - b[1].score ||  a[1].interpretersums['nostr-follows']?.numRatings - b[1].interpretersums['nostr-follows']?.numRatings 
-  })
-  // return scorecards
 }
 
 
@@ -175,20 +182,20 @@ const zerosums : CalculatorSums = {
 /**
  * Calculates a single scorecard for a given subject (ratee)
  */
-export class ScorecardCalculator {
+class ScorecardCalculator {
 
   get output() : [elemId, Required<ScorecardData>] | undefined {
     if(!this.calculated || this._data.score < this.params.minscore) return undefined
     return [ this._subject, this._data ]
   }
-  get scorecard() : Required<Scorecard> | undefined { 
-    // if(!this.calculated) return undefined
-    return {
-      ...this.keys,
-      subject : this._subject,
-      ...this._data
-    }
-  }
+  // get scorecard() : Required<Scorecard> | undefined { 
+  //   // if(!this.calculated) return undefined
+  //   return {
+  //     ...this.keys,
+  //     subject : this._subject,
+  //     ...this._data
+  //   }
+  // }
   // sum() can only be run as many times as we have ratings
   // get summed(){ return this._sumcount < ratings.length ? false : true }
   get calculated(){ 
@@ -206,20 +213,24 @@ export class ScorecardCalculator {
   }
   // constructor(subject : elemId)
   // constructor(scorecard : Scorecard)
-  constructor(private keys : Required<GrapevineKeys>, input : elemId | Scorecard, private params : Required<CalculatorParams>){
+  constructor(
+    readonly observer : userId, 
+    input : elemId | Scorecard, 
+    private params : Required<CalculatorParams>
+  ){
       // input is subject of new scorecard
       this._subject = typeof input == 'string' ?  input :  input.subject as string
   }
 
   // STEP B : calculate sums
   // calculate sum of weights & sum of products
-  sum( rating : Rating, ratercard? : Scorecard){
+  sum( rating : Rating, raterscore ? : number){
 
-    // do nothing if ratercard.subject does not match rating.rater
-    if(ratercard && ratercard.subject != rating.rater){
-      console.log("GrapeRank : ScorecardCalculator : WARNING ratercard.subject does not match rating.rater")
-      return
-    }
+    // // do nothing if ratercard.subject does not match rating.rater
+    // if(ratercard && ratercard.subject != rating.rater){
+    //   console.log("GrapeRank : ScorecardCalculator : WARNING ratercard.subject does not match rating.rater")
+    //   return
+    // }
 
     // only run sum() if calculator iterations are NOT completed
     if(this.calculated) {
@@ -227,10 +238,10 @@ export class ScorecardCalculator {
     }
 
     // determine rater influence
-    let influence = rating.rater == this.keys.observer ? 1 : ratercard?.score ? ratercard.score as number : 0
+    let influence = rating.rater == this.observer ? 1 : raterscore || 0
     let weight = influence * rating.confidence; 
     // no attenuation for observer
-    if (rating.rater != this.keys.observer) 
+    if (rating.rater != this.observer) 
       weight = weight * (this.params.attenuation);
 
     // add to sums
@@ -250,7 +261,7 @@ export class ScorecardCalculator {
       // numRatings = number of protocol ratings for this subject
       numRatings : 1 + (protocolmeta?.numRatings || 0),
       // numRatedBy = number of protocol ratings for observer by this subject
-      numRatedBy : (rating.ratee == this.keys.observer ? 1 : 0) + (protocolmeta?.numRatedBy || 0)
+      numRatedBy : (rating.ratee == this.observer ? 1 : 0) + (protocolmeta?.numRatedBy || 0)
     }
     // assure that the metadata entry is updated for this protocol, in case it was undefined before.
     this._meta.set(rating.protocol, protocolmeta)
@@ -327,15 +338,15 @@ export class ScorecardCalculator {
 
 
 // LOG iteration
-function logScoresForIteration(generator : GrapeRankGenerator) : number[] {
+function logScoresForIteration(calculators :  Map<elemId,ScorecardCalculator>) : number[] {
 
-    let scorecards : Scorecard[] = [] 
+    let scorecards : ScorecardData[] = [] 
     let increment  = .1
     let scores : number[] 
     let v = "", ov = ""
 
-    generator.calculators.forEach((calculator) => {
-      if(calculator.scorecard) scorecards.push( calculator.scorecard)
+    calculators.forEach((calculator) => {
+      if(calculator.output) scorecards.push( calculator.output[1])
     })
 
     scores = countScorecardsByScore(scorecards, increment)
@@ -350,7 +361,7 @@ function logScoresForIteration(generator : GrapeRankGenerator) : number[] {
 }
 
 
-function countScorecardsByScore(scorecards : Scorecard[], increment : number ) : number[] {
+function countScorecardsByScore(scorecards : ScorecardData[], increment : number ) : number[] {
   let grouped = groupScorecardsByScore(scorecards,increment)
   let count : number[] = []
   let index = 0
@@ -361,8 +372,8 @@ function countScorecardsByScore(scorecards : Scorecard[], increment : number ) :
   return count
 }
 
-function groupScorecardsByScore(scorecards : Scorecard[], increment : number ) : Scorecard[][] {
-  let group : Scorecard[][] = []
+function groupScorecardsByScore(scorecards : ScorecardData[], increment : number ) : ScorecardData[][] {
+  let group : ScorecardData[][] = []
   for(let s in scorecards){
     let card = scorecards[s]
     if(card?.score != undefined){

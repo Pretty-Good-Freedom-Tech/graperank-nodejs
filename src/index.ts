@@ -1,6 +1,6 @@
-import * as Calculator from "./Calculator";
-import * as Interpreter from "./Interpreter";
-import { Storage } from "./Storage";
+import { Calculator } from "graperank-calculator";
+import { Interpreter } from "graperank-interpreter";
+import { Storage } from "graperank-storage";
 import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, StorageParams, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, elemId } from "./types";
 
 
@@ -154,12 +154,13 @@ export class GrapeRankEngine {
 
 
 // generate 
-export class GrapeRankGenerator {
+class GrapeRankGenerator {
 
   readonly keys : Required<GrapevineKeys>
   private worldview : WorldviewData
   private grapevine : GrapevineData
-  readonly calculators : Map<elemId,Calculator.ScorecardCalculator> = new Map()
+  private calculator : Calculator | undefined
+  private interpreter : Interpreter | undefined
   private scorecards : ScorecardsEntry[] | undefined
   private _stopping : boolean
   private _stopped : boolean
@@ -238,8 +239,8 @@ export class GrapeRankGenerator {
     return false
   }
 
-  private calculate = Calculator.calculate
-  private interpret = Interpreter.interpret
+  // private calculate = Calculator.calculate
+  // private interpret = Interpreter.interpret
 
   async generate(scorecards? : Scorecards | undefined) : Promise<WorldviewOutput | undefined> {
     try{
@@ -254,14 +255,26 @@ export class GrapeRankGenerator {
 
       // initiate the interpretation and calculation engines to run in the background
       // while writing status updates to the grapevine object in storage (via GrapeRankGenerator)
-      const interpretations = await this.interpret(raters) 
+      this.interpreter = new Interpreter(
+        raters,
+        this.settings.interpreters,
+        this.updateInterpreterStatus.bind(this)
+      )
+      const interpretations = await this.interpreter.interpret() 
       // const ratings : RatingsList = interpeterresults.ratings
 
       if(this.stopping || !interpretations) throw('stopping')
 
       // Calculate scorecards
       console.log("GrapeRank : calling calculate with "+interpretations.ratings.length+" ratings... ")
-      this.scorecards = await this.calculate(interpretations.ratings)
+      this.calculator = new Calculator(
+        this.keys.observer,
+        interpretations.ratings, 
+        this.settings.calculator, 
+        this.updateCalculatorStatus.bind(this),
+        this.updateCalculatorComplete.bind(this)
+      )
+      this.scorecards = await this.calculator.calculate()
 
       if(this.stopping || !this.scorecards) throw('stopping')
 
@@ -286,8 +299,6 @@ export class GrapeRankGenerator {
       }
 
       // send new scorecards to storage
-      // FIXME there MAY be some null or empty scorecard entries in this array 
-      // ... causing problems when converting to map on client side
       await this.engine.storage.scorecards.put(this.keys, this.scorecards)
       // send worldview (and grapevines) to storage 
       await this.update('Grapevine scorecards have been generated.')
@@ -324,6 +335,8 @@ export class GrapeRankGenerator {
   async stop(){
     if(this.worldview.calculating) {
       this._stopping = true
+      if(this.interpreter) this.interpreter.stop()
+      if(this.calculator) this.calculator.stop()
       while(!this.stopped){
         await new Promise( resolve => setTimeout(resolve,1000) )
       }

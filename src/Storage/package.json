@@ -1,0 +1,18 @@
+{
+  "name": "graperank-storage",
+  "version": "0.1.x",
+  "description": "GrapeRank Storage module, used to read and write interpreter cache and generated scorecards.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"No tests specified\" && exit 1"
+  },
+  "keywords": [
+    "GrapeRank",
+    "storage"
+  ],
+  "author": "Pretty Good Freedom Tech",
+  "license": "AGPL-3.0-or-later",
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.675.0"
+  }
+}
