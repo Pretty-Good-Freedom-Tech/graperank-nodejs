@@ -4,7 +4,8 @@
   "description": "GrapeRank Interpreter module, used to generate ratings from interpreter protocols.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 1"
+    "test": "echo \"No tests specified\" && exit 1",
+    "prepare": "tsc"
   },
   "keywords": [
     "GrapeRank",
