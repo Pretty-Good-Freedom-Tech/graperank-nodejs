@@ -4,7 +4,8 @@
   "description": "GrapeRank Storage module, used to read and write interpreter cache and generated scorecards.",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"No tests specified\" && exit 1"
+    "test": "echo \"No tests specified\" && exit 1",
+    "prepare": "tsc"
   },
   "keywords": [
     "GrapeRank",
