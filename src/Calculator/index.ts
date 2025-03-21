@@ -26,7 +26,7 @@ export class Calculator {
     minscore : 0,
     // max difference between calculator iterations
     // ZERO == most precise
-    precision : 0,
+    precision : 0.00001,
     // devmode if off by default
     devmode : false
   }
@@ -232,10 +232,10 @@ class ScorecardCalculator {
     //   return
     // }
 
-    // only run sum() if calculator iterations are NOT completed
-    if(this.calculated) {
-      return
-    }
+    // ALWAYS run calculater ... to assure score convergence for "more distant" dos
+    // if(this.calculated) {
+    //   return
+    // }
 
     // determine rater influence
     let influence = rating.rater == this.observer ? 1 : raterscore || 0
@@ -281,10 +281,8 @@ class ScorecardCalculator {
       console.log('DEBUGTARGET : caling calculator.calculate() for target : ')
     }
 
-    // only run calculate() WHEN summed is complete
-    // if(!this.summed) return false
-    // only calculate if calculator iterations have not completed
-    if(this.calculated) return true
+    // ALWAYS run calculater ... to assure score convergence for "more distant" dos
+    // if(this.calculated) return true
 
     // calculate score
     let confidence = 0
@@ -321,7 +319,11 @@ class ScorecardCalculator {
   // TODO refactor this._sums as this._input in the format of scorecard.input
   private _sums : CalculatorSums = {...zerosums}
   private get _average(){ 
-    return this._sums.products / this._sums.weights
+    let average = 0
+    try{
+      average = this._sums.products / this._sums.weights
+    }catch(e){}
+    return average <= 0 ? 0 : average
   }
   // STEP D : calculate confidence
   private get confidence(){
