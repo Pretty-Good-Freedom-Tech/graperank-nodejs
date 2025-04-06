@@ -1,7 +1,10 @@
 import { Calculator } from "@graperank/calculator";
 import { Interpreter } from "@graperank/interpreter";
 import { Storage } from "@graperank/storage";
-import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, StorageParams, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, elemId } from "./types";
+import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, StorageParams, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, elemId, ProtocolFactory } from "@graperank/util/types";
+import { NostrProtocolFactory } from '@graperank/nostr-protocols';
+import { Protocols } from "@graperank/interpreter/protocols";
+
 
 
 // GrapeRank class has static properties and methods 
@@ -9,11 +12,13 @@ import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, St
 export class GrapeRank {
   private static instances : Map<userId, GrapeRankEngine> = new Map()
   
-  static init( observer : userId,  storageparams : StorageParams ) : GrapeRankEngine {
+  static init( observer : userId,  storage : StorageParams, protocols : ProtocolFactory[] = []) : GrapeRankEngine {
     console.log("GrapeRank : initializing engine for : ", observer)
     let instance = this.instances.get(observer)
     if(!instance) {
-      instance = new GrapeRankEngine(observer, storageparams)
+      // add default nostr protocols to begining of protocols
+      protocols.unshift(NostrProtocolFactory)
+      instance = new GrapeRankEngine(observer, storage, protocols)
       this.instances.set(observer, instance)
     }
     return instance
@@ -33,10 +38,12 @@ export class GrapeRankEngine {
   readonly storage: StorageProcessor;
   private generator: GrapeRankGenerator;
   private listeners: Map<sessionid, GraperankListener> = new Map();
+  readonly protocols : Protocols
 
-  constructor(observer: userId, storageparams: StorageParams) {
+  constructor(observer: userId, storage: StorageParams, protocols : ProtocolFactory[]) {
     this.observer = observer;
-    this.storage = Storage.init(storageparams);
+    this.storage = Storage.init(storage);
+    this.protocols = new Protocols(protocols)
   }
 
   async contexts() : Promise<string[]> {
@@ -256,11 +263,13 @@ class GrapeRankGenerator {
       // initiate the interpretation and calculation engines to run in the background
       // while writing status updates to the grapevine object in storage (via GrapeRankGenerator)
       this.interpreter = new Interpreter(
-        raters,
-        this.settings.interpreters,
+        this.engine.protocols,
         this.updateInterpreterStatus.bind(this)
       )
-      const interpretations = await this.interpreter.interpret() 
+      const interpretations = await this.interpreter.interpret(
+        raters,
+        this.settings.interpreters,
+      ) 
       // const ratings : RatingsList = interpeterresults.ratings
 
       if(this.stopping || !interpretations) throw('stopping')

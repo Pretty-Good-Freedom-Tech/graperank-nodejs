@@ -1,19 +1,21 @@
 import { Protocols } from "./protocols"
-import { forEachBigArray, DEBUGTARGET } from "../utils"
-import { ProtocolRequest, RatingsList, userId , protocol, InterpreterResults, ProtocolResponse, RatingsMap, InterpreterProtocolStatus} from "../types"
+import { forEachBigArray, DEBUGTARGET } from "@graperank/util"
+import { ProtocolRequest, RatingsList, userId , protocol, InterpreterResults, ProtocolResponse, RatingsMap, InterpreterProtocolStatus, ProtocolFactory} from "@graperank/util/types"
 
 export class Interpreter {
   private stopping : boolean = false
   constructor(
-    readonly raters:userId[],
-    readonly requests : ProtocolRequest[],
+    private protocols : Protocols,
     private updateStatus? : (status : InterpreterProtocolStatus) => Promise<boolean>
   ){}
   stop(){
     this.stopping = true
   }
-  async interpret() : Promise<InterpreterResults | undefined>{
-    var protocol = new Protocols()
+  async interpret(
+    raters : userId[],
+    requests : ProtocolRequest[],
+  ) : Promise<InterpreterResults | undefined>{
+    // var protocol = new Protocols(this.factories)
     var responses : ProtocolResponse[] = []
     var ratings : RatingsList = []
     // var requests : ProtocolRequest[] = settings.interpreters
@@ -23,22 +25,22 @@ export class Interpreter {
     const allraters : Map<userId,number> = new Map()
     var requestauthors : Set<userId> | undefined
 
-    if(!!this.raters && !!this.requests){
-      console.log("GrapeRank : interpret : instantiating ",this.requests.length, " protocols for ",this.raters.length," raters")
+    if(!!raters && !!requests){
+      console.log("GrapeRank : interpret : instantiating ",requests.length, " protocols for ",raters.length," raters")
       console.log("----------------------------------")
       // add input raters to allraters
-      this.raters.forEach((userid) => allraters.set(userid,0))
+      raters.forEach((userid) => allraters.set(userid,0))
 
       // loop through each interpreter request
       // requests having `iterations` will ADD to `allraters` with each interation
       // each request will use the `allraters` list from previous requests
-      for(let r in this.requests){
+      for(let r in requests){
         if(this.stopping) return undefined
         let requestindex = r as unknown as number
-        let request = this.requests[requestindex]
-        protocol.setRequest(request)
+        let request = requests[requestindex]
+        this.protocols.setRequest(request)
         // reset newraters, protocolratings, and newratings between protocol requests
-        const protocolratings = protocol.getInterpreted(request.protocol)
+        const protocolratings = this.protocols.getInterpreted(request.protocol)
         let newraters : Set<userId> = new Set()
         let newratings : RatingsMap = new Map()
         let thisiteration : number = 0
@@ -47,7 +49,7 @@ export class Interpreter {
         if(request.authors && request.authors.length) requestauthors = new Set(request.authors)
         
         let currentstatus : InterpreterProtocolStatus
-        console.log("GrapeRank : interpret : calling " +request.protocol+" protocol with params : ",protocol.get(request.protocol).params)
+        console.log("GrapeRank : interpret : calling " +request.protocol+" protocol with params : ",this.protocols.get(request.protocol).params)
 
         while(thisiteration < maxiterations){
           if(this.stopping) return undefined
@@ -63,23 +65,23 @@ export class Interpreter {
               protocol : request.protocol,
               // FIXME dos needs to be set on initial status ... 
               // how to determine this acurately BEFORE fetchData() has been called?
-              dos : request.iterate ? protocol.get(request.protocol)?.fetched?.length || 0 : undefined,
+              dos : request.iterate ? this.protocols.get(request.protocol)?.fetched?.length || 0 : undefined,
               authors : thisiterationraters.size
             }
             if(this.updateStatus && !await this.updateStatus(currentstatus)) throw('failed updating initial status')
             let fetchstart = Date.now()
             // fetch protocol specific dataset for requestauthors OR newraters OR allraters
-            let dos = await protocol.fetchData(request.protocol, thisiterationraters)
+            let dos = await this.protocols.fetchData(request.protocol, thisiterationraters)
             // TODO cache fetched data
             currentstatus.fetched = [
-                protocol.get(request.protocol).fetched[dos -1]?.size || 0, // number of fetched events
+                this.protocols.get(request.protocol).fetched[dos -1]?.size || 0, // number of fetched events
                 Date.now() - fetchstart, // duration of fetch request
                 thisiteration == maxiterations ? true : undefined // final DOS iteration ?
               ]
             if(this.updateStatus && !await this.updateStatus(currentstatus)) throw('failed updating status after fetch')
             let interpretstart = Date.now()
             // interpret fetched data and add to newratings
-            newratings = await protocol.interpret(request.protocol, dos)
+            newratings = await this.protocols.interpret(request.protocol, dos)
             currentstatus.interpreted = [
                 countRatingsMap(newratings)|| 0, // number of interpretations rated
                 Date.now() - interpretstart, // duration of interpretation
@@ -104,7 +106,7 @@ export class Interpreter {
           }
 
           responses.push({
-            request : {...request, params : protocol.get(request.protocol).params},
+            request : {...request, params : this.protocols.get(request.protocol).params},
             index : requestindex,
             iteration : thisiteration,
             numraters : thisiterationraters.size,
@@ -134,9 +136,9 @@ export class Interpreter {
       }) 
     
     }else{
-      console.log('GrapeRank : ERROR in interpret() : no raterts && requests passed : ', this.raters, this.requests)
+      console.log('GrapeRank : ERROR in interpret() : no raterts && requests passed : ', raters, requests)
     }
-    protocol.clear()
+    this.protocols.clear()
     return {ratings, responses}
 
   }

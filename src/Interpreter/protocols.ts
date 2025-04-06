@@ -1,16 +1,17 @@
 // Export ALL module instances of Interpreter interface
 // as this[source][protocol]
 
-import { InterpretationProtocol, ProtocolParams, ProtocolRequest, RatingsMap, protocol, userId} from '../types'
-import { DEBUGTARGET } from '../utils'
-import { NostrProtocolFactory } from './Nostr'
+import { InterpretationProtocol, ProtocolFactory, ProtocolParams, ProtocolRequest, RatingsMap, protocol, userId} from '@graperank/util/types'
+import { DEBUGTARGET } from '@graperank/util'
 
 
 export class Protocols extends Map<string, InterpretationProtocol<ProtocolParams>> {
-  constructor() {
+  constructor(factories : ProtocolFactory[]) {
     super()
-    NostrProtocolFactory.forEach((initializer, protocol)=>{
-      if(!this.has(protocol)) this.set(protocol, initializer())
+    factories.forEach((protocolfactory) => {
+      protocolfactory.forEach((initializer, protocol)=>{
+        if(!this.has(protocol)) this.set(protocol, initializer())
+      })
     })
   }
 

@@ -1,4 +1,4 @@
-import {StorageProcessor, StorageParams } from "../types"
+import {StorageProcessor, StorageParams } from "@graperank/util/types"
 import { s3Processor } from "./s3";
 
 export namespace StorageProcessors {

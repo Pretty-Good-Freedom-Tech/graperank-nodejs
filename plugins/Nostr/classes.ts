@@ -2,8 +2,8 @@ import { Event as NostrEvent} from 'nostr-tools/core'
 import { Filter as NostrFilter} from 'nostr-tools/filter'
 import { SimplePool } from 'nostr-tools/pool'
 import { useWebSocketImplementation } from 'nostr-tools/pool'
-import { DEBUGTARGET, sliceBigArray} from "../../utils"
-import { elemId, InterpretationProtocol, ProtocolParams, ProtocolRequest, Rating, RatingData, RatingsMap, userId } from "../../types"
+import { DEBUGTARGET, sliceBigArray} from "@graperank/util"
+import { elemId, InterpretationProtocol, ProtocolParams, ProtocolRequest, Rating, RatingData, RatingsMap, userId } from "@graperank/util/types"
 import WebSocket from 'ws'
 import { npubEncode } from "nostr-tools/nip19"
 useWebSocketImplementation(WebSocket)

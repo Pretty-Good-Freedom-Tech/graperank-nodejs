@@ -1,7 +1,7 @@
 // Adapted apiS3.ts from nostrmeet.me
 // FIXME env depends on being run inside svelte 
 import { PutObjectCommand, GetObjectCommand, S3Client, ListObjectsCommand, type GetObjectCommandOutput, type PutObjectCommandOutput, type ListObjectsCommandOutput, S3ClientConfig } from '@aws-sdk/client-s3';
-import { s3Config, StorageFileList } from '../../types';
+import { s3Config, StorageFileList } from '@graperank/util/types';
 
 export type S3FileList = {
   Key : string, 

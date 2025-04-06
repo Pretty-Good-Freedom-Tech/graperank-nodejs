@@ -25,9 +25,11 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "workspaces": [
+    "src/Util",
     "src/Calculator",
     "src/Interpreter",
-    "src/Storage"
+    "src/Storage",
+    "plugins/Nostr"
   ],
   "devDependencies": {
     "@types/node": "^22.14.0"

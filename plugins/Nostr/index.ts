@@ -1,4 +1,4 @@
-import { oneorzero, ProtocolFactory, ProtocolParams } from "../../types";
+import { oneorzero, ProtocolFactory, ProtocolParams } from "@graperank/util/types";
 import { applyRatingsByTag, NostrProtocol, validateEachEventHasAuthor } from "./classes";
 
 

@@ -7,5 +7,8 @@
     "Calculator"
   ],
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/engine/LICENSE"
+  "license": "@graperank/engine/LICENSE",
+  "dependencies": {
+    "@graperank/util": "*"
+  }
 }

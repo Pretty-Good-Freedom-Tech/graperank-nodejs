@@ -1,5 +1,5 @@
-import type { CalculatorParams, CalculatorSums, elemId, protocol, Rating, RatingsList, Scorecard, ScorecardData, ScorecardInterpretation, CalculatorIterationStatus, ScorecardsEntry, userId } from "../types"
-import { DEBUGTARGET } from "../utils"
+import type { CalculatorParams, CalculatorSums, elemId, protocol, Rating, RatingsList, Scorecard, ScorecardData, ScorecardInterpretation, CalculatorIterationStatus, ScorecardsEntry, userId } from "@graperank/util/types"
+import { DEBUGTARGET } from "@graperank/util"
 
 // var params : Required<CalculatorParams>
 

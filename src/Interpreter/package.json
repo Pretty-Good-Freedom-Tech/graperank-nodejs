@@ -1,6 +1,6 @@
 {
   "name": "@graperank/interpreter",
-  "description": "GrapeRank Interpreter module, used to generate ratings from interpreter protocols.",
+  "description": "GrapeRank Interpreter, a pluggable module for generating normalized ratings from interpreter protocols.",
   "main": "index.js",
   "keywords": [
     "GrapeRank",
@@ -9,7 +9,6 @@
   "author": "Pretty Good Freedom Tech",
   "license": "@graperank/engine/LICENSE",
   "dependencies": {
-    "nostr-tools": "^2.7.2",
-    "ws": "^8.18.0"
+    "@graperank/util": "*"
   }
 }

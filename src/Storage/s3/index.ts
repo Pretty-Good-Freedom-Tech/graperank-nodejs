@@ -1,4 +1,4 @@
-import { GrapevineKeys, ScorecardKeys, WorldviewKeys, WorldviewData, StorageType, StorageProcessor, StorageFileList, s3Config, ScorecardsEntry, StorageOperations } from "../../types"
+import { GrapevineKeys, ScorecardKeys, WorldviewKeys, WorldviewData, StorageType, StorageProcessor, StorageFileList, s3Config, ScorecardsEntry, StorageOperations } from "@graperank/util/types"
 import { s3Api } from "./s3api"
 
 export class s3Processor implements StorageProcessor {
