@@ -1,15 +1,11 @@
 {
-  "name": "graperank-calculator",
-  "version": "0.1.x",
+  "name": "@graperank/calculator",
   "description": "GrapeRank Calculator module, used to calculate scorecards from ratings.",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"No tests specified\" && exit 1"
-  },
   "keywords": [
     "GrapeRank",
     "Calculator"
   ],
   "author": "Pretty Good Freedom Tech",
-  "license": "AGPL-3.0-or-later"
+  "license": "@graperank/engine/LICENSE"
 }

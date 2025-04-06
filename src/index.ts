@@ -1,6 +1,6 @@
-import { Calculator } from "graperank-calculator";
-import { Interpreter } from "graperank-interpreter";
-import { Storage } from "graperank-storage";
+import { Calculator } from "@graperank/calculator";
+import { Interpreter } from "@graperank/interpreter";
+import { Storage } from "@graperank/storage";
 import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, StorageParams, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, elemId } from "./types";
 
 
