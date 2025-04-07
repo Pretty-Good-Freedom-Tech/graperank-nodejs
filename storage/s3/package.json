@@ -2,7 +2,9 @@
   "name": "@graperank-storage/s3",
   "description": "An Storage plugin for GrapeRank, used to store and retrieve calculated scorecards and interpreter cache.",
   "version": "0.2.0",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "index.js",
   "keywords": [
     "GrapeRank",

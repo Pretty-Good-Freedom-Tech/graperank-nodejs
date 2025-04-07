@@ -2,7 +2,9 @@
   "name": "@graperank/engine",
   "description": "GrapeRank engine runs calculator and interpretor with given inputs",
   "version": "0.2.0",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "index.js",
   "keywords": [
     "GrapeRank"

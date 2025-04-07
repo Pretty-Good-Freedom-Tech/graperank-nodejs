@@ -1,7 +1,9 @@
 {
   "name": "@graperank/graperank",
   "version": "0.2.0",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "description": "A Nostr recommendation engine, powered by Webs of Trust and grapes.",
   "main": "graperank/index.js",
   "scripts": {

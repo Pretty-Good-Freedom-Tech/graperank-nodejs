@@ -2,7 +2,9 @@
   "name": "@graperank/interpreter",
   "description": "GrapeRank Interpreter, a pluggable module for generating normalized ratings from interpreter protocols.",
   "version": "0.2.0",
-  "private": false,
+  "publishConfig": {
+    "access": "public"
+  },
   "main": "index.js",
   "keywords": [
     "GrapeRank",
