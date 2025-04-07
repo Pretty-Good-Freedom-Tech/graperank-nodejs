@@ -4,5 +4,6 @@
   "version": "0.2.0",
   "main": "index.js",
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/graperank/LICENSE"
+  "license": "@graperank/graperank/LICENSE",
+  "gitHead": "3d82dc884b67cf80d1aa0e04af241b483eaa3715"
 }

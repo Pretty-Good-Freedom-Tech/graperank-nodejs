@@ -11,5 +11,6 @@
   "license": "@graperank/graperank/LICENSE",
   "dependencies": {
     "@graperank/util": "*"
-  }
+  },
+  "gitHead": "3d82dc884b67cf80d1aa0e04af241b483eaa3715"
 }

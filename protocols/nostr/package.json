@@ -11,9 +11,10 @@
   "author": "Pretty Good Freedom Tech",
   "license": "@graperank/engine/LICENSE",
   "dependencies": {
-    "@graperank/util": "*",
     "@graperank/interpreter": "*",
+    "@graperank/util": "*",
     "nostr-tools": "^2.7.2",
     "ws": "^8.18.0"
-  }
+  },
+  "gitHead": "3d82dc884b67cf80d1aa0e04af241b483eaa3715"
 }
