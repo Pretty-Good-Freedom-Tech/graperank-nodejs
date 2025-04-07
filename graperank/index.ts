@@ -18,7 +18,7 @@ export class GrapeRank {
   static init( 
     observer : userId,  
     storage : StorageProcessor | DEFAULT_STORAGE_CONFIG, 
-    protocolfactories? : ProtocolFactory[]
+    protocolfactories : ProtocolFactory[] = []
   ) : GrapeRankEngine {
     console.log("GrapeRank : initializing engine for : ", observer)
     let instance = this._instances.get(observer)

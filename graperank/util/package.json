@@ -1,6 +1,7 @@
 {
   "name": "@graperank/util",
   "description": "Defines utility functions and types used by GrapeRank packages.",
+  "version": "0.2.0",
   "main": "index.js",
   "author": "Pretty Good Freedom Tech",
   "license": "@graperank/graperank/LICENSE"
