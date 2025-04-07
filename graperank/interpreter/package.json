@@ -7,7 +7,7 @@
     "Interpreter"
   ],
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/engine/LICENSE",
+  "license": "@graperank/graperank/LICENSE",
   "dependencies": {
     "@graperank/util": "*"
   }

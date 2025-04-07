@@ -1,5 +1,5 @@
 {
-  "name": "@graperank/engine",
+  "name": "@graperank/graperank",
   "version": "0.1.3",
   "description": "A Nostr recommendation engine, powered by Webs of Trust and grapes.",
   "main": "index.js",
@@ -25,9 +25,8 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "workspaces": [
-    "src/Util",
-    "src/Calculator",
-    "src/Interpreter",
+    "graperank/util",
+    "graperank/engine",
     "protocols/nostr",
     "storage/s3"
   ],

@@ -3,5 +3,5 @@
   "description": "Defines utility functions and types used by GrapeRank packages.",
   "main": "index.js",
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/engine/LICENSE"
+  "license": "@graperank/graperank/LICENSE"
 }

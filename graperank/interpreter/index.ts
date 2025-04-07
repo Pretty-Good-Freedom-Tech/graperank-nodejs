@@ -1,6 +1,6 @@
 import { Protocols } from "./protocols"
 import { forEachBigArray, DEBUGTARGET } from "@graperank/util"
-import { ProtocolRequest, RatingsList, userId , protocol, InterpreterResults, ProtocolResponse, RatingsMap, InterpreterProtocolStatus, ProtocolFactory} from "@graperank/util/types"
+import { ProtocolRequest, RatingsList, userId , protocol, InterpreterResults, ProtocolResponse, RatingsMap, InterpreterProtocolStatus} from "@graperank/util/types"
 
 export class Interpreter {
   private stopping : boolean = false

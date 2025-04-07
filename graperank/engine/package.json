@@ -1,0 +1,15 @@
+{
+  "name": "@graperank/engine",
+  "description": "GrapeRank engine runs calculator and interpretor with given inputs",
+  "main": "index.js",
+  "keywords": [
+    "GrapeRank"
+  ],
+  "author": "Pretty Good Freedom Tech",
+  "license": "@graperank/graperank/LICENSE",
+  "dependencies": {
+    "@graperank/util": "*",
+    "@graperank/calculator": "*",
+    "@graperank/interpreter": "*"
+  }
+}
