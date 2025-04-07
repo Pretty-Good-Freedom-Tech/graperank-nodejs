@@ -1,5 +1,5 @@
 {
-  "name": "@graperank/nostr-protocols",
+  "name": "@graperank-protocols/nostr",
   "description": "An Interpreter plugin for GrapeRank, used to generate ratings from Nostr events.",
   "main": "index.js",
   "keywords": [

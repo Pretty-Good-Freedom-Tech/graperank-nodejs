@@ -1,50 +1,65 @@
 import { Calculator } from "@graperank/calculator";
 import { Interpreter } from "@graperank/interpreter";
-import { Storage } from "@graperank/storage";
-import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, StorageParams, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, elemId, ProtocolFactory } from "@graperank/util/types";
-import { NostrProtocolFactory } from '@graperank/nostr-protocols';
+import {GrapevineData, GrapevineKeys, userId, WorldviewOutput, WorldviewKeys, GraperankSettings, Scorecards, ProtocolRequest, protocol, InterpreterProtocolStatus, CalculatorIterationStatus, WorldviewData, DEFAULT_CONTEXT, GraperankListener, GraperankNotification, sessionid, context, timestamp, ScorecardsOutput, WorldviewSettings, ScorecardsEntry, StorageProcessor, ProtocolFactory, s3Config } from "@graperank/util/types";
+import { NostrProtocolFactory } from '@graperank-protocols/nostr';
 import { Protocols } from "@graperank/interpreter/protocols";
+import { s3Processor } from "../storage/s3";
 
+
+type DEFAULT_STORAGE_CONFIG = s3Config
+const DEFAULT_STORAGE_PROCESSOR = s3Processor
+const DEFAULT_PROTOCOL_FACTORIES = [NostrProtocolFactory]
 
 
 // GrapeRank class has static properties and methods 
 // to manage and persist GrapeRankEngine instances across client sessions
 export class GrapeRank {
-  private static instances : Map<userId, GrapeRankEngine> = new Map()
+  private static _instances : Map<userId, GrapeRankEngine> = new Map()
   
-  static init( observer : userId,  storage : StorageParams, protocols : ProtocolFactory[] = []) : GrapeRankEngine {
+  static init( 
+    observer : userId,  
+    storage : StorageProcessor | DEFAULT_STORAGE_CONFIG, 
+    protocolfactories? : ProtocolFactory[]
+  ) : GrapeRankEngine {
     console.log("GrapeRank : initializing engine for : ", observer)
-    let instance = this.instances.get(observer)
+    let instance = this._instances.get(observer)
     if(!instance) {
-      // add default nostr protocols to begining of protocols
-      protocols.unshift(NostrProtocolFactory)
+      // set storage processor from input
+      storage = this.getStorage(storage) as StorageProcessor
+      // set protocols from input, overriding default nostr protocols if provided
+      const protocols = new Protocols([ ...DEFAULT_PROTOCOL_FACTORIES, ...protocolfactories ])
+      // add new instance of GrapeRankEngine
       instance = new GrapeRankEngine(observer, storage, protocols)
-      this.instances.set(observer, instance)
+      this._instances.set(observer, instance)
     }
     return instance
   }
 
-  static async observers(storageconfig : StorageParams) : Promise<string[]> {
-    let storage =  Storage.init(storageconfig)
+  static async observers(storage : StorageProcessor | DEFAULT_STORAGE_CONFIG) : Promise<string[]> {
+    storage = this.getStorage(storage) as StorageProcessor
     return (await storage.observers.list()).list
   }
+
+  static getStorage(storage : StorageProcessor | DEFAULT_STORAGE_CONFIG) : StorageProcessor {
+    if(storage instanceof StorageProcessor) return storage
+    return new DEFAULT_STORAGE_PROCESSOR(storage)
+  }
 }
+
 
 
 // GrapeRankEngine should ONLY be instantiated by GrapeRank class
 
 export class GrapeRankEngine {
-  readonly observer: userId;
-  readonly storage: StorageProcessor;
   private generator: GrapeRankGenerator;
   private listeners: Map<sessionid, GraperankListener> = new Map();
-  readonly protocols : Protocols
 
-  constructor(observer: userId, storage: StorageParams, protocols : ProtocolFactory[]) {
-    this.observer = observer;
-    this.storage = Storage.init(storage);
-    this.protocols = new Protocols(protocols)
-  }
+  constructor(
+    readonly observer: userId, 
+    readonly storage: StorageProcessor, 
+    readonly protocols : Protocols 
+  ) {}
+
 
   async contexts() : Promise<string[]> {
     return (await this.storage.worldview.list({observer:this.observer})).list 

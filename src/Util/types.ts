@@ -176,15 +176,18 @@ export type ScorecardsEntry = [elemId, ScorecardData]
 
 export type StorageType =  'worldview' | 'scorecards' 
 
-// configure the storage engine upon instantiation
-export type StorageParams = {
-  // provide a string to reference an existing implmentation StorageProcessor
-  // or provide reference to a new StorageProcessor implmentation
-  processor : string | StorageProcessor
-  // provide credentials and other info needed by the storage backend
-  config : StorageConfig
-}
+// // configure the storage engine upon instantiation
+// export type StorageParams = {
+//   // provide a string to reference an existing implmentation StorageProcessor
+//   // or provide reference to a new StorageProcessor implmentation
+//   processor? : extends StorageProcessor
+//   // provide credentials and other info needed by the storage backend
+//   config : StorageConfig
+// }
 
+export type StorageInit = StorageConfig | StorageProcessor
+
+// provide credentials and other info needed by the storage backend
 export type StorageConfig = {} // ParamsObject
 export interface s3Config extends StorageConfig {
   region : string,

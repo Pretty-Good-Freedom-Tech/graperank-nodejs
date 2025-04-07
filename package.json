@@ -28,8 +28,8 @@
     "src/Util",
     "src/Calculator",
     "src/Interpreter",
-    "src/Storage",
-    "plugins/Nostr"
+    "protocols/nostr",
+    "storage/s3"
   ],
   "devDependencies": {
     "@types/node": "^22.14.0"

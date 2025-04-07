@@ -1,0 +1,16 @@
+{
+  "name": "@graperank-storage/s3",
+  "description": "An Storage plugin for GrapeRank, used to store and retrieve calculated scorecards and interpreter cache.",
+  "main": "index.js",
+  "keywords": [
+    "GrapeRank",
+    "Storage",
+    "S3"
+  ],
+  "author": "Pretty Good Freedom Tech",
+  "license": "@graperank/engine/LICENSE",
+  "dependencies": {
+    "@graperank/util": "*",
+    "@aws-sdk/client-s3": "^3.675.0"
+  }
+}
