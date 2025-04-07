@@ -1,6 +1,7 @@
 {
   "name": "@graperank-protocols/nostr",
   "description": "An Interpreter plugin for GrapeRank, used to generate ratings from Nostr events.",
+  "private": false,
   "version": "0.2.0",
   "main": "index.js",
   "keywords": [
@@ -15,6 +16,5 @@
     "@graperank/util": "*",
     "nostr-tools": "^2.7.2",
     "ws": "^8.18.0"
-  },
-  "gitHead": "3d82dc884b67cf80d1aa0e04af241b483eaa3715"
+  }
 }

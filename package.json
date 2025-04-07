@@ -1,12 +1,13 @@
 {
   "name": "@graperank/graperank",
   "version": "0.2.0",
+  "private": false,
   "description": "A Nostr recommendation engine, powered by Webs of Trust and grapes.",
   "main": "graperank/index.js",
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "echo \"No tests specified\" && exit 1",
-    "publish" : "lerna publish from-package",
+    "publish" : "lerna publish from-package --no-private",
     "prepare": "tsc"
   },
   "repository": {
