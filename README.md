@@ -1,32 +1,32 @@
 # GrapeRank
 
-> **A soveregnty respecting reccomedation engine, powered by Webs of Trust and grapes**
+> **A sovereignty-respecting recommendation engine, powered by Webs of Trust and grapes**
 
-GrapeRank (WIP) is an extensible library for Nostr developers to provide 'people' or 'content' reccomendations for end users. It may be embedded within a client as a server side component OR used as a stand alone 'nip accessible' reccomendation engine by any service provider. 
+GrapeRank (WIP) is an extensive library for Nostr developers to provide 'people' or 'content' recomendations for end-users. It may be embedded within a client as a server side component OR used as a stand alone 'NIP-accessible' recommendation engine by any service provider. 
 
 Explore the demo client at [My Grapevine](https://grapevine.my) get a taste of how it works.
 
 
 ## Webs of Trust
 
-> Soveregnty is respected when users have the freedom to choose ... and a variety of usefull choices.
+> Sovereignty is respected when users have the freedom to choose ... and a variety of useful choices.
 
-Not everyone wants or needs algorithms to provide them with reccomendations. However, the more Nostr scales (to global influence) the more clients and service providers will leverage automated tools for users to 'discover' new and interesting 'people' and 'content' across the network.
+Not everyone wants or needs algorithms to provide them with recommendations. However, the more Nostr scales (to global influence), the more clients and service providers will leverage automated tools for users to 'discover' new and interesting 'people' and 'content' across the network.
 
-On Nostr, there's no central 'trust authotity'. Weeding out 'bots and bad actors' and providing usefull reccomendations is not so straighforward. Even 'crowd sourced' content moderation, at its core, requires some ability to differentiate 'trustworthy' opinions from spam.
+On Nostr, there's no central 'trust authority'. Weeding out 'bots and bad actors' and providing useful recommendations is not so straightforward. Even 'crowd-sourced' content moderation, at its core, requires some ability to differentiate 'trustworthy' opinions from spam.
 
-'Webs of Trust' solves this problem without requiring a central authority. It works by defining 'trustworthiness' relative to the end user, based on their own content and interactions (likes, follows, mutes, ect...). In this manner, soveregnty is respected when end users have the freedom to choose their own (favorite) reccomendation service for any client, from a wide variety of practical choices.
+'Webs of Trust' solve this problem without requiring a central authority. They work by defining 'trustworthiness' relative to the end user, based on their own content and interactions (likes, follows, mutes, etc...). In this manner, sovereignty is respected when end users have the freedom to choose their own (favorite) recommendation service for any client, from a wide variety of practical choices.
 
 
 ## The GrapeRank Engine
 
 - **Avoids** the 'popularity contest' that favors influencers, by ranking ALL users on a capped 'weighted average' scale.
-- **Accepts** any 'kind' of content (follows, likes, mutes, ect...) for calculating scores 
-- **Accepts** any 'source' of content (not JUST nostr) for calculating scores
-- **Allows** any 'context' to be used for calculating 'trustowrthiness' in diferent cases. (not JUST web of trust)
-- **Allows** running 'asyncronos' calculations on the server, pushing status notifications to connected cleints.
+- **Accepts** any 'kind' of content (follows, likes, mutes, etc...) for calculating scores.
+- **Accepts** any 'source' of content (not JUST Nostr) for calculating scores.
+- **Allows** any 'context' to be used for calculating 'trustworthiness' in different cases. (not JUST Web of Trust)
+- **Allows** running 'asynchronous' calculations on the server, pushing status notifications to connected clients.
 - **Accepts** any 'storage' backend to be plugged in, for easy integration with existing infrastructure.
-- **Accepts** multiple 'outputs' to be plugged in (comming soon) to satisfy for any 'nostr nip' specifications.
+- **Accepts** multiple 'outputs' to be plugged in (coming soon) to satisfy for any 'nostr NIP' specifications.
 
 
 ### Interpreter 
@@ -35,7 +35,7 @@ On Nostr, there's no central 'trust authotity'. Weeding out 'bots and bad actors
 
 > A : *"Whatever 'inputs' you want ... and for any 'context' you need"*.
 
-The GrapeRank `Interpreter` ingests and normalizes ANY content to user configurable standard `ratings`, valued from 0-1. It has a pluggable architecture by which developers can add additional `protocols` for interpreting ANY content from ANY network.
+The GrapeRank `Interpreter` ingests and normalizes ANY content to user-configurable standard `ratings`, valued from 0-1. It has a modular architecture by which developers can add additional `protocols` for interpreting ANY content from ANY network.
 
 Here's an overview of the interpreter protocols for the *default* 'Web of Trust' context :
 
@@ -46,22 +46,24 @@ Here's an overview of the interpreter protocols for the *default* 'Web of Trust'
 
 ### Calculator 
 
-The `Calculator` algorithm at the heart of GrapeRank, iteratively processes content interpretations to determine a final `influence score` for every rated user. IMPORTANTLY, the score that it generates is a 'weighted average', with a fixed ceiling. This prevents 'high follow count' influencers from overwhelming the top scores, allowing 'regular users' to shine just as much, while also keeping 'bots and bad actors' at the bottom. Of course, the calculator also has configurable parameters, allowing end users to tweak the final score distribution.
+The `Calculator` algorithm at the heart of GrapeRank, iteratively processes content interpretations to determine a final `influence score` for every rated user. IMPORTANTLY, the score that it generates is a 'weighted average', with a fixed ceiling. This prevents 'high follow count' influencers from overwhelming the top scores, allowing 'regular users' to shine just as much, while also keeping 'bots and bad actors' at the bottom. Of course, the calculator also has configurable parameters, allowing end-users to tweak the final score distribution.
 
 
 ### Storage
 
-The pluggable `Storage` module allows calculator results to be stored in any kind of database, flat file, or cloud storage architecture. Currently, `s3` storage APIs are supported. 
+The `Storage` module allows calculator results to be stored in any kind of database, flat file, or cloud storage architecture. Currently, `s3` storage APIs are supported. 
 
 ### Cache (coming soon) 
 
-Lte's face it ... scraping Nostr for a MILLION events to interpret EVERY time GrapeRank runs is NOT very 'efficient'. But that is the current state of technology... 
+Let's face it ... scraping Nostr for a MILLION events to interpret EVERY time GrapeRank runs is NOT very 'efficient'. But that is the current state of technology... 
 
-Coming soon, the `Interpreter` module will provide a cache for any `protocol` to store and retrieve it's interpretable content. This will NOT ONLY allow for less demand on the network BUT WILL ALSO improve the fidelity of generated results.
+Coming soon, the `Interpreter` module will provide a cache for any `protocol` to store and retrieve its interpretable content. This will NOT ONLY allow for less demand on the network, but will ALSO improve the fidelity of generated results.
 
 ### Output (coming soon)
 
-Even though 'reccomendations as a service' are a relatively new concept for Nostr, there are already a number of `NIP` standards for which such a service could `Output` signed events. Stay tuned for the following ...
+Even though 'recommendations-as-a-service' are a relatively new concept for Nostr, there are already a number of `NIP` standards by which such a service could `Output` signed events. 
+
+Stay tuned for the following ...
 
 - [`NIP-51`](https://github.com/nostr-protocol/nips/blob/master/51.md) 
           : Dynamic lists for custom feeds and other stuff
