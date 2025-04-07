@@ -6,6 +6,7 @@
   "scripts": {
     "build": "npm run build --workspaces --if-present",
     "test": "echo \"No tests specified\" && exit 1",
+    "publish" : "lerna publish from-package",
     "prepare": "tsc"
   },
   "repository": {
