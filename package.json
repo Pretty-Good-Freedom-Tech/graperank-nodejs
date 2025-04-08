@@ -1,6 +1,6 @@
 {
   "name": "@graperank/monorepo",
-  "version": "0.2.*",
+  "version": "0.2.0",
   "private": true,
   "publishConfig": {
     "access": "restricted"
