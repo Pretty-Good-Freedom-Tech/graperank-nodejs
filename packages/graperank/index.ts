@@ -1,7 +1,7 @@
 import { StorageProcessor, ProtocolFactory, s3Config, userId } from "@graperank/util/types";
-import { NostrProtocolFactory } from '@graperank-protocols/nostr';
+import { NostrProtocolFactory } from '@graperank/protocols-nostr';
 import { Protocols } from "@graperank/interpreter/protocols";
-import { s3Processor } from "@graperank-storage/s3";
+import { s3Processor } from "@graperank/storage-s3";
 import { GrapeRankEngine } from "@graperank/engine";
 
 

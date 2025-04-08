@@ -1,8 +1,8 @@
 // Export ALL module instances of Interpreter interface
 // as this[source][protocol]
 
-import { InterpretationProtocol, ProtocolFactory, ProtocolParams, ProtocolRequest, RatingsMap, protocol, userId} from '@graperank/util/types'
-import { DEBUGTARGET } from '../util'
+import { InterpretationProtocol, ProtocolFactory, ProtocolParams, ProtocolRequest, RatingsMap, protocol, userId} from "@graperank/util/types"
+import { DEBUGTARGET } from "@graperank/util"
 
 
 export class Protocols extends Map<string, InterpretationProtocol<ProtocolParams>> {

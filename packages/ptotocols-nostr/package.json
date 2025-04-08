@@ -1,5 +1,5 @@
 {
-  "name": "@graperank-protocols/nostr",
+  "name": "@graperank/protocols-nostr",
   "description": "An Interpreter plugin for GrapeRank, used to generate ratings from Nostr events.",
   "publishConfig": {
     "access": "public"
@@ -12,7 +12,11 @@
     "Nostr"
   ],
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/engine/LICENSE",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Pretty-Good-Freedom-Tech/graperank/issues"
+  },
+  "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
     "@graperank/interpreter": "*",
     "@graperank/util": "*",

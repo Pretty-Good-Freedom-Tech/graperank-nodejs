@@ -1,14 +1,12 @@
 {
-  "name": "@graperank/graperank",
-  "version": "0.2.0",
+  "name": "@graperank/monorepo",
+  "version": "0.2.*",
+  "private": true,
   "publishConfig": {
-    "access": "public"
+    "access": "restricted"
   },
-  "description": "A Nostr recommendation engine, powered by Webs of Trust and grapes.",
-  "main": "graperank/index.js",
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "test": "echo \"No tests specified\" && exit 1",
     "publish" : "lerna publish from-package --no-private",
     "prepare": "tsc"
   },
@@ -16,25 +14,10 @@
     "type": "git",
     "url": "git+https://github.com/Pretty-Good-Freedom-Tech/graperank.git"
   },
-  "keywords": [
-    "Nostr",
-    "Webs of Trust",
-    "Recommendations",
-    "Grapevine"
-  ],
   "author": "Pretty Good Freedom Tech",
   "license": "AGPL-3.0-or-later",
-  "bugs": {
-    "url": "https://github.com/Pretty-Good-Freedom-Tech/graperank/issues"
-  },
-  "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "workspaces": [
-    "graperank/util",
-    "graperank/engine",
-    "graperank/calculator",
-    "graperank/interpreter",
-    "protocols/nostr",
-    "storage/s3"
+    "packages/*"
   ],
   "devDependencies": {
     "@types/node": "^22.14.0",

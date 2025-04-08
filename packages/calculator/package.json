@@ -11,7 +11,11 @@
     "Calculator"
   ],
   "author": "Pretty Good Freedom Tech",
-  "license": "@graperank/graperank/LICENSE",
+  "license": "AGPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Pretty-Good-Freedom-Tech/graperank/issues"
+  },
+  "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",  
   "dependencies": {
     "@graperank/util": "*"
   }
