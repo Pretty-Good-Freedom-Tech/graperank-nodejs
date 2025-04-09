@@ -1,6 +1,6 @@
 {
   "name": "@graperank/calculator",
-  "description": "GrapeRank Calculator module, used to calculate scorecards from ratings.",
+  "description": "The GrapeRank Calculator module, calculates scorecards from input ratings.",
   "version": "0.2.0",
   "publishConfig": {
     "access": "public"

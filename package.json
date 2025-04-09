@@ -1,5 +1,6 @@
 {
   "name": "@graperank/monorepo",
+  "description": "GrapeRank is a soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes.",
   "version": "0.2.0",
   "private": true,
   "publishConfig": {

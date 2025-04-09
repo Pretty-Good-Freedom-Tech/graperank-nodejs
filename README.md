@@ -1,8 +1,8 @@
 # GrapeRank
 
-> **A soveregnty respecting reccomedation engine, powered by Webs of Trust and grapes**
+> **A soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes**
 
-GrapeRank (WIP) is an extensible library for Nostr developers to provide 'people' or 'content' reccomendations for end users. It may be embedded within a client as a server side component OR used as a stand alone 'nip accessible' reccomendation engine by any service provider. 
+GrapeRank (WIP) is an modular and extensible server side library for developers to provide 'people' or 'content' reccomendations for their end users. It may be embedded within a relay, or used as a client backend, or a stand alone DVM, allowing any service provider to offer 'NIP standard' reccomendations across clients.
 
 Explore the demo client at [My Grapevine](https://grapevine.my) get a taste of how it works.
 
@@ -77,13 +77,13 @@ See the API endpoints in the [demo codebase](https://github.com/Pretty-Good-Free
 
 
 ```
-# add module to your typescript project
-npm install https://github.com/Pretty-Good-Freedom-Tech/graperank-nodejs 
+# add GrapeRank to your typescript project
+npm install @graperank/graperank
 ```
 
 ``` js
 // initialize (or retrieve existing) graperank engine in your server code
-// with pubkey of 'observer' and configuration for storage 
+// with pubkey of 'observer' and configuration for s3 storage 
 let engine = GrapeRank.init( pubkey, storage )
 
 
@@ -103,6 +103,6 @@ engine.scorecards( context )
 
 ---
 ---
-GrapeRank Engine Developed by : [ManiMe@nostrmeet.me](https://njump.me/npub1manlnflyzyjhgh970t8mmngrdytcp3jrmaa66u846ggg7t20cgqqvyn9tn)
+GrapeRank Developed by : [ManiMe@nostrmeet.me](https://njump.me/npub1manlnflyzyjhgh970t8mmngrdytcp3jrmaa66u846ggg7t20cgqqvyn9tn)
 
-GrapeRank Algorithm Designed by : [David@bitcoinpark.com](https://njump.me/npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3)
+Algorithm Designed by : [David@bitcoinpark.com](https://njump.me/npub1u5njm6g5h5cpw4wy8xugu62e5s7f6fnysv0sj0z3a8rengt2zqhsxrldq3)

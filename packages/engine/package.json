@@ -1,6 +1,6 @@
 {
   "name": "@graperank/engine",
-  "description": "GrapeRank engine runs calculator and interpretor with given inputs",
+  "description": "The GrapeRank Engine module stores and retrieves generated scores, and runs the Calculator and Interpretor modules to generate new scores. It requires one storage and one or more protocol plugins as input.",
   "version": "0.2.0",
   "publishConfig": {
     "access": "public"

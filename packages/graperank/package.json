@@ -4,7 +4,7 @@
   "publishConfig": {
     "access": "public"
   },
-  "description": "A Nostr recommendation engine, powered by Webs of Trust and grapes.",
+  "description": "This is the top level GrapeRank Module. It manages instances of GrapeRank Engine across client sessions, using default Protocols and Storage plugins provided by GrapeRank.",
   "main": "index.js",
   "keywords": [
     "Nostr",

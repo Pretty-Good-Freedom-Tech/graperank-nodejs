@@ -1,6 +1,6 @@
 {
   "name": "@graperank/protocols-nostr",
-  "description": "An Interpreter plugin for GrapeRank, used to generate ratings from Nostr events.",
+  "description": "The Nostr Protocols plugin for GrapeRank allows the Interpreter to fetch and normalize ratings data from any kind[s] of Nostr event.",
   "publishConfig": {
     "access": "public"
   },

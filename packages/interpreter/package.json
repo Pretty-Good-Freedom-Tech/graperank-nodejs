@@ -1,6 +1,6 @@
 {
   "name": "@graperank/interpreter",
-  "description": "GrapeRank Interpreter, a pluggable module for generating normalized ratings from interpreter protocols.",
+  "description": "The GrapeRank Interpreter module generates normalized ratings from ingested network data. It requires one or more Protocols plugins.",
   "version": "0.2.0",
   "publishConfig": {
     "access": "public"
