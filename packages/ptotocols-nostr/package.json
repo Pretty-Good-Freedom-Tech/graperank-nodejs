@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/interpreter": "*",
-    "@graperank/util": "*",
+    "@graperank/interpreter": "^0.2.0",
+    "@graperank/util": "^0.2.0",
     "nostr-tools": "^2.7.2",
     "ws": "^8.18.0"
   }

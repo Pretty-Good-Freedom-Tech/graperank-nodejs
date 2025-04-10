@@ -14,10 +14,10 @@
   "bugs": {
     "url": "https://github.com/Pretty-Good-Freedom-Tech/graperank/issues"
   },
-  "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",  
+  "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/calculator": "*",
-    "@graperank/interpreter": "*",
-    "@graperank/util": "*"
+    "@graperank/calculator": "^0.2.0",
+    "@graperank/interpreter": "^0.2.0",
+    "@graperank/util": "^0.2.0"
   }
 }

@@ -19,6 +19,6 @@
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.675.0",
-    "@graperank/util": "*"
+    "@graperank/util": "^0.2.0"
   }
 }

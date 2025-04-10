@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/util": "*",
-    "@graperank/storage-s3": "*",
-    "@graperank/protocols-nostr": "*",
-    "@graperank/calculator": "*",
-    "@graperank/interpreter": "*",
-    "@graperank/engine": "*"
+    "@graperank/calculator": "^0.2.0",
+    "@graperank/engine": "^0.2.0",
+    "@graperank/interpreter": "^0.2.0",
+    "@graperank/protocols-nostr": "^0.2.0",
+    "@graperank/storage-s3": "^0.2.0",
+    "@graperank/util": "^0.2.0"
   }
 }
