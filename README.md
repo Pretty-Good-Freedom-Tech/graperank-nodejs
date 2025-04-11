@@ -1,6 +1,6 @@
-# GrapeRank
+# GrapeRank : A Web Of Trust Engine for Nostr
 
-> **A soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes**
+> **GrapeRank is a soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes**
 
 GrapeRank (WIP) is an modular and extensible server side library for developers to provide 'people' or 'content' reccomendations for their end users. It may be embedded within a relay, or used as a client backend, or a stand alone DVM, allowing any service provider to offer 'NIP standard' reccomendations across clients.
 
