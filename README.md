@@ -1,4 +1,4 @@
-# GrapeRank : A Web Of Trust Engine for Nostr
+# GrapeRank : Smarter Webs Of Trust for Nostr
 
 > **GrapeRank is a soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes**
 
