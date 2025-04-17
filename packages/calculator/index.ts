@@ -50,6 +50,7 @@ export class Calculator {
     // STEP A : initialize ratee scorecard
     // Retrieve or create a ScorecardCalculator for each ratee in ratings
     for(let r in this.ratings){
+      if(!this.ratings[r]) continue
       let ratee = this.ratings[r].ratee
       let rater = this.ratings[r].rater
       if(ratee && !this.calculators.get(ratee)){
@@ -69,7 +70,7 @@ export class Calculator {
   }
 
   // returns number of scorecards calculated
-  private async iterate() : Promise<number> {
+  private async iterate() : Promise<number | undefined> {
     let calculating : number = 0
     let calculated : number = 0
     let uncalculated : string[]
@@ -94,6 +95,7 @@ export class Calculator {
       // STEP B : calculate sums
       // Add rater's rating to the sum of weights & products for the ratee scorecard
       for(let r in this.ratings){
+        if(!this.ratings[r]) continue
         let calculator = this.calculators.get(this.ratings[r].ratee)
         let raterscore = this.calculators.get(this.ratings[r].rater as string)?.score
         if(calculator) {
