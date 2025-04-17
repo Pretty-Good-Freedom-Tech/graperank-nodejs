@@ -1,7 +1,7 @@
 {
   "name": "@graperank/engine",
   "description": "The GrapeRank Engine module stores and retrieves generated scores, and runs the Calculator and Interpretor modules to generate new scores. It requires one storage and one or more protocol plugins as input.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publishConfig": {
     "access": "public"
   },
@@ -16,7 +16,7 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/calculator": "^0.2.0",
+    "@graperank/calculator": "^0.2.1",
     "@graperank/interpreter": "^0.2.0",
     "@graperank/util": "^0.2.0"
   }

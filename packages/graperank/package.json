@@ -1,6 +1,6 @@
 {
   "name": "@graperank/graperank",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publishConfig": {
     "access": "public"
   },
@@ -18,8 +18,8 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/calculator": "^0.2.0",
-    "@graperank/engine": "^0.2.0",
+    "@graperank/calculator": "^0.2.1",
+    "@graperank/engine": "^0.2.1",
     "@graperank/interpreter": "^0.2.0",
     "@graperank/protocols-nostr": "^0.2.0",
     "@graperank/storage-s3": "^0.2.0",

@@ -1,7 +1,7 @@
 {
   "name": "@graperank/calculator",
   "description": "The GrapeRank Calculator module, calculates scorecards from input ratings.",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "publishConfig": {
     "access": "public"
   },
