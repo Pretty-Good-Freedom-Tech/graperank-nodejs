@@ -1,14 +1,14 @@
 {
   "name": "@graperank/monorepo",
   "description": "GrapeRank is a soveregnty respecting reccomedation engine for Nostr, powered by Webs of Trust and grapes.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "private": true,
   "publishConfig": {
     "access": "restricted"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
-    "publish" : "lerna publish from-package --no-private",
+    "build": "npm run build --workspaces --if-present --verbose",
+    "publish": "lerna publish from-package --no-private",
     "prepare": "tsc"
   },
   "repository": {
@@ -24,5 +24,11 @@
     "@types/node": "^22.14.0",
     "lerna": "^8.2.1"
   },
-  "dependencies": {}
+  "dependencies": {
+    "@typescript-eslint/eslint-plugin": "^8.30.1",
+    "@typescript-eslint/parser": "^8.30.1",
+    "eslint": "^9.24.0",
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.3"
+  }
 }

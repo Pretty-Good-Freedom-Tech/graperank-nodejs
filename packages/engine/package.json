@@ -1,11 +1,14 @@
 {
   "name": "@graperank/engine",
   "description": "The GrapeRank Engine module stores and retrieves generated scores, and runs the Calculator and Interpretor modules to generate new scores. It requires one storage and one or more protocol plugins as input.",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
-  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "main": "build/index.js",
   "keywords": [
     "GrapeRank"
   ],

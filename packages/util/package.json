@@ -1,11 +1,14 @@
 {
   "name": "@graperank/util",
   "description": "The GrapeRank Util package defines various helper functions, constants, and types used by the GrapeRank modules and plugins.",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
-  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "main": "build/index.js",
   "author": "Pretty Good Freedom Tech",
   "license": "AGPL-3.0-or-later",
   "bugs": {

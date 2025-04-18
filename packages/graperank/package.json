@@ -1,11 +1,15 @@
 {
   "name": "@graperank/graperank",
-  "version": "0.2.1",
+  "version": "0.2.2",
+  "description": "This is the top level GrapeRank Module. It manages instances of GrapeRank Engine across client sessions, using default Protocols and Storage plugins provided by GrapeRank.",
   "publishConfig": {
     "access": "public"
   },
-  "description": "This is the top level GrapeRank Module. It manages instances of GrapeRank Engine across client sessions, using default Protocols and Storage plugins provided by GrapeRank.",
-  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+
+  "main": "build/index.js",
   "keywords": [
     "Nostr",
     "Webs of Trust",

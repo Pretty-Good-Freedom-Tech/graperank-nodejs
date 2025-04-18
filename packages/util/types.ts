@@ -211,14 +211,14 @@ export abstract class StorageProcessor {
 constructor (config : StorageConfig) {}
 
 // retrieve a list of all observers
-observers : { list? : () => Promise< StorageFileList | undefined>}
+  observers!: { list?: () => Promise<StorageFileList | undefined>} 
 
 // store and retrieve worldview settings for calculating a grapevine
 // as well as the details of each grapevine calculation
-worldview : StorageOperations<WorldviewKeys, WorldviewData>
+  worldview!: StorageOperations<WorldviewKeys, WorldviewData>
 
 // query to return FULL scorecards from ANY grapevine
-scorecards : StorageOperations<GrapevineKeys, ScorecardsEntry[]>
+  scorecards!: StorageOperations<GrapevineKeys, ScorecardsEntry[]>
 
 // for interpreter protocols to cache fetched data 
 // interpretercache? : StorageOperations<InterpreterCacheKeys, any>

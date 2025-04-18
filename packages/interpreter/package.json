@@ -1,11 +1,14 @@
 {
   "name": "@graperank/interpreter",
   "description": "The GrapeRank Interpreter module generates normalized ratings from ingested network data. It requires one or more Protocols plugins.",
-  "version": "0.2.0",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
-  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "main": "build/index.js",
   "keywords": [
     "GrapeRank",
     "Interpreter"

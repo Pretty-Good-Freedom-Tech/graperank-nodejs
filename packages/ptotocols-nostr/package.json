@@ -1,11 +1,14 @@
 {
   "name": "@graperank/protocols-nostr",
   "description": "The Nostr Protocols plugin for GrapeRank allows the Interpreter to fetch and normalize ratings data from any kind[s] of Nostr event.",
+  "version": "0.2.2",
   "publishConfig": {
     "access": "public"
   },
-  "version": "0.2.0",
-  "main": "index.js",
+  "scripts": {
+    "build": "tsc --build"
+  },
+  "main": "build/index.js",
   "keywords": [
     "GrapeRank",
     "Interpreter",

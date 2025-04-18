@@ -1,0 +1,16 @@
+{
+  "compilerOptions":  {
+    // default for all packages
+    "target": "es2022",
+    "module": "NodeNext",
+    "declaration": true,
+    "incremental": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    // for this package
+    "composite":true,
+     "rootDir": "./",
+     "outDir": "./build",
+  },
+}
