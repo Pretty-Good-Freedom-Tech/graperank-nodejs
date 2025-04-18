@@ -20,6 +20,6 @@
   },
   "homepage": "https://github.com/Pretty-Good-Freedom-Tech/graperank#readme",
   "dependencies": {
-    "@graperank/util": "^0.2.0"
+    "@graperank/util": "^0.2.2"
   }
 }
